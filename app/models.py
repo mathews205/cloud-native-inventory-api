@@ -1,5 +1,6 @@
-from sqlalchemy import Column, Integer, String, DateTime, Index
-from sqlalchemy.sql import func
+from datetime import datetime, timezone
+
+from sqlalchemy import Column, Integer, String, DateTime
 from app.database import Base
 
 
@@ -19,8 +20,9 @@ class Product(Base):
     # Stock quantity with default value of 0
     quantity = Column(Integer, default=0, nullable=False)
     
-    # Timestamp automatically set to current UTC time
-    created_at = Column(DateTime, default=func.now(), nullable=False)
-
-    def __repr__(self):
-        return f"<Product(id={self.id}, sku='{self.sku}', name='{self.name}', quantity={self.quantity})>"
+    # Timestamp automatically set to the current UTC time
+    created_at = Column(
+        DateTime(timezone=True),
+        default=lambda: datetime.now(timezone.utc),
+        nullable=False,
+    )

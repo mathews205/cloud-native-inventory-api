@@ -1,5 +1,6 @@
-from pydantic import BaseModel
 from datetime import datetime
+
+from pydantic import BaseModel, ConfigDict
 
 
 class ProductCreate(BaseModel):
@@ -22,6 +23,5 @@ class ProductResponse(BaseModel):
     quantity: int
     created_at: datetime
 
-    class Config:
-        # Enable ORM mode to work with SQLAlchemy objects
-        from_attributes = True
+    # Allow Pydantic to read data from SQLAlchemy model objects
+    model_config = ConfigDict(from_attributes=True)
