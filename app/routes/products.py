@@ -9,7 +9,7 @@ from app.schemas import ProductCreate, ProductResponse
 router = APIRouter(prefix="/products", tags=["products"])
 
 
-@router.post("", response_model=ProductResponse)
+@router.post("", response_model=ProductResponse, status_code=201)
 def create_product(product: ProductCreate, db: Session = Depends(get_db)):
     existing_product = db.query(Product).filter(Product.sku == product.sku).first()
 
