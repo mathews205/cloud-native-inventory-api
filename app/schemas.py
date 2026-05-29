@@ -15,6 +15,13 @@ class StockUpdate(BaseModel):
     quantity: int
 
 
+class ProductUpdate(BaseModel):
+    """Schema for partial updates to a product."""
+    name: str | None = None
+    sku: str | None = None
+    quantity: int | None = None
+
+
 class ProductResponse(BaseModel):
     """Schema for product responses from API."""
     id: int
