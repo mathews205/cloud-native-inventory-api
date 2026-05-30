@@ -1,0 +1,31 @@
+stages:
+  - test
+
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  # Database URL used by the application and Alembic migrations in CI
+  DATABASE_URL: "postgresql://inventory_user:inventory_password@postgres:5432/inventory_db"
+
+cache:
+  paths:
+    - .cache/pip
+
+test:
+  stage: test
+  image: python:3.13-slim
+  services:
+    - name: postgres:16-alpine
+      alias: postgres
+  variables:
+    POSTGRES_USER: inventory_user
+    POSTGRES_PASSWORD: inventory_password
+    POSTGRES_DB: inventory_db
+  before_script:
+    - python --version
+    - pip install --upgrade pip
+    - pip install -r requirements.txt
+    # Give Postgres a moment to start before running migrations
+    - sleep 5
+    - alembic upgrade head
+  script:
+    - pytest
