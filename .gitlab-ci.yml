@@ -25,7 +25,8 @@ test:
     - pip install --upgrade pip
     - pip install -r requirements.txt
     # Give Postgres a moment to start before running migrations
-    - sleep 5
+    - apt-get update && apt-get install -y postgresql-client
+    - until pg_isready -h postgres -p 5432 -U inventory_user -d inventory_db; do echo "Waiting for PostgreSQL..."; sleep 1; done
     - alembic upgrade head
   script:
     - pytest
